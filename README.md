@@ -18,6 +18,7 @@
 
 ## Release History
 
+- 0.2: Added RSS reader so now the script downloads the latest video from the RSS feed.
 - 0.1: Initial release.
 
 <!-- <details> -->
@@ -42,7 +43,8 @@ Using [SemVer](http://semver.org/).
 
 ## Acknowledgements
 
-- [yt-dlp](https://pypi.org/project/yt-dlp/)
+- [feedparser](https://pypi.org/project/feedparser/) to read RSS feeds
+- [yt-dlp](https://pypi.org/project/yt-dlp/) to download videos
 
 ## Contributing
 
