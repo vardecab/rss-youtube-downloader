@@ -1,4 +1,4 @@
-# youtube-downloader
+# rss-youtube-downloader
 
 ![](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue)
 
@@ -18,6 +18,7 @@
 
 ## Release History
 
+- 0.3: Fixed the script on macOS; added checker to avoid duplicates; re-wrote the script to handle multiple videos.
 - 0.2: Added RSS reader so now the script downloads the latest video from the RSS feed.
 - 0.1: Initial release.
 
