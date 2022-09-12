@@ -10,7 +10,7 @@ import feedparser # read RSS
 
 # other ↓
 import time # calculate script's run time
-from datetime import datetime # generate timestamp for saving data
+# from datetime import datetime # generate timestamp for saving data
 # import os # create folders
 
 # notifications ↓ 
@@ -27,7 +27,7 @@ iconCheckmark = "icons/checkmark.png"
 # import webbrowser # open URLs from notification
 
 # NOTE: fix certificate issue -> https://stackoverflow.com/questions/28282797/feedparser-parse-ssl-certificate-verify-failed
-if platform != 'win32': # check if user is using macOS
+if platform == 'darwin': # check if user is using macOS
     import ssl
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
