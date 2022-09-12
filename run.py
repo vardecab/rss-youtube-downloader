@@ -4,16 +4,30 @@
 
 # ------------ import libs ----------- #
 
-import time # calculate script's run time
-from datetime import datetime # generate timestamp for saving data
-# import os # create folders
-import sys # check OS
-
+# core ↓
 import yt_dlp # download YouTube videos # NOTE: https://github.com/ytdl-org/youtube-dl/issues/30102#issuecomment-943849906
 import feedparser # read RSS
 
+# other ↓
+import time # calculate script's run time
+from datetime import datetime # generate timestamp for saving data
+# import os # create folders
+
+# notifications ↓ 
+from sys import platform # check platform (Windows/macOS)
+if platform == 'darwin':
+    import pync # macOS notifications
+elif platform == 'win32':
+    from win10toast_click import ToastNotifier # Windows 10/11 notifications
+    toaster = ToastNotifier() # initialize win10toast
+    
+iconDownload = "icons/download.png"
+iconCheckmark = "icons/checkmark.png"
+
+# import webbrowser # open URLs from notification
+
 # NOTE: fix certificate issue -> https://stackoverflow.com/questions/28282797/feedparser-parse-ssl-certificate-verify-failed
-if sys.platform != 'win32': # check if user is using macOS
+if platform != 'win32': # check if user is using macOS
     import ssl
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
@@ -60,6 +74,26 @@ def downloadVideo(videoURL):
             print("Video downloaded or it's already on the disk.") # status
             # TODO: how to check if downloading or already on disk?
             
+            # notifications 
+            if platform == "darwin": # macOS
+                pync.notify(
+                    f"Video downloaded or already on the disk.",
+                    title='rss-youtube-downloader',
+                    contentImage=iconDownload,
+                    sound=""
+                    # open=
+                    )
+            elif platform == "win32": # Windows
+                toaster.show_toast(
+                    title="rss-youtube-downloader", 
+                    msg=
+                    f"Video downloaded or already on the disk.",
+                    icon_path="icons/download.ico",
+                    duration=None,
+                    threaded=True
+                    # callback_on_click=
+                    ) # duration=None - leave notification in Notification Center; threaded=True - rest of the script will be allowed to be executed while the notification is still active
+            
             with open('videos.txt','a') as saveFile: # create and save file with downloaded videos' URLs
                 saveFile.write(videoURL + "\n")
                 # NOTE: not very pretty but works
@@ -73,7 +107,6 @@ def downloadVideo(videoURL):
 # TODO: get input + default on timeout 
 # TODO: ask which feed to check, type 1/2/3/4/5 or name of the channel 
 # TODO: check multiple feeds at once? function?
-# TODO: notifications when something is found / not found
 
 RSSfeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UC8LJZNHnqXKg5TMgyvxszPA' 
 print("Reading RSS feed...") # status
@@ -100,6 +133,25 @@ counter = 1 # NOTE: how far back we should look for the videos (3 = 4 videos bac
 try:
     if read_RSS.entries[counter].link in file_content:
         print(f"Newest video already watched or downloaded and available on the disk.")
+         # notifications 
+        if platform == "darwin": # macOS
+            pync.notify(
+                f"No new videos.",
+                title='rss-youtube-downloader',
+                contentImage=iconCheckmark,
+                sound=""
+                # open=
+                )
+        elif platform == "win32": # Windows
+            toaster.show_toast(
+                title="rss-youtube-downloader", 
+                msg=
+                f"No new videos.",
+                icon_path="icons/checkmark.ico",
+                duration=None,
+                threaded=True
+                # callback_on_click=
+                ) # duration=None - leave notification in Notification Center; threaded=True - rest of the script will be allowed to be executed while the notification is still active
     else:
         while read_RSS.entries[counter].link not in file_content: # if video is new (not in the file of past downloads) then go and download; if not -> skip 
 

@@ -1,2 +1,6 @@
 # other 
 .vscode
+.ds_store
+
+# automate
+automate.sh

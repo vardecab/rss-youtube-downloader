@@ -18,6 +18,7 @@
 
 ## Release History
 
+- 0.4: Added notifications.
 - 0.3: Fixed the script on macOS; added checker to avoid duplicates; re-wrote the script to handle multiple videos.
 - 0.2: Added RSS reader so now the script downloads the latest video from the RSS feed.
 - 0.1: Initial release.
@@ -46,6 +47,8 @@ Using [SemVer](http://semver.org/).
 
 - [feedparser](https://pypi.org/project/feedparser/) to read RSS feeds
 - [yt-dlp](https://pypi.org/project/yt-dlp/) to download videos
+- Icons from [Flaticon](https://www.flaticon.com)
+- PNG → ICO conversion with [ConvertICO](https://convertico.com)
 
 ## Contributing
 
