@@ -18,6 +18,7 @@
 
 ## Release History
 
+- 0.5: Checking multiple feeds at once; changed variables from snake_case to camelCase; improved messages.
 - 0.4.1: Tiny fix to platform check.
 - 0.4: Added notifications.
 - 0.3: Fixed the script on macOS; added checker to avoid duplicates; re-wrote the script to handle multiple videos.
