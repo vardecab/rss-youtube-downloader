@@ -18,6 +18,7 @@
 
 ## Release History
 
+- 0.6: Rewrote some core logic to better handle new files.
 - 0.5: Checking multiple feeds at once; changed variables from snake_case to camelCase; improved messages.
 - 0.4.1: Tiny fix to platform check.
 - 0.4: Added notifications.

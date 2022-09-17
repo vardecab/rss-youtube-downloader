@@ -61,7 +61,7 @@ print("Starting the script...") # status
 
 def downloadVideo(videoURL):
     
-    downloadPath = r'/Users/x/TV Shows/' # download location
+    downloadPath = r'/Users/x/TV Shows/YouTube' # download location
 
     #  parameters for the downloader
     optionalParameters = { 
@@ -122,14 +122,14 @@ def readingRSS(RSSfeed):
         print(f"Can't read the RSS feed. Maybe there is a problem with your internet connection or with the `RSSfeed` URL: {RSSfeed}. Closing...")
         exit()
 
-# ------ map feeds to variables ------ #
-
-RSSfeed1 = 'https://www.youtube.com/feeds/videos.xml?channel_id=UC8LJZNHnqXKg5TMgyvxszPA' # Budda
-RSSfeed2 = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ' # MKBHD
-
 # -------- add feeds to a list ------- #
 
-RSSfeeds = [RSSfeed1, RSSfeed2] # create a list of feeds
+# create a list of feeds
+RSSfeeds = [
+    'https://www.youtube.com/feeds/videos.xml?channel_id=UC8LJZNHnqXKg5TMgyvxszPA', # Budda
+    'https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ' # MKBHD
+    ] 
+
 print(f"How many feeds / channels we need to check: {len(RSSfeeds)}") # status
 
 # -- read / create .txt file w/ URLs - #
@@ -144,68 +144,71 @@ except:
         fileContent = openFile.read() # read file
 
 # ------------ core stuff ------------ #
-    
-counterVideoLookback = 1 # NOTE: how far back we should look for the videos (3 = 4 videos back, 10 = 11 videos back, 0 = just newest video)
-    # FIX: not working when eg. 2nd video downloaded and you're looking for the 1st and 3rd
-    # NOTE: check line #202 too
+
 counterFeedList = 0 # go through feeds in the list
 
-try:
-    while counterFeedList < len(RSSfeeds): # if counter smaller than number of feeds in the list
-        readRSS = readingRSS(RSSfeeds[counterFeedList])
-        if readRSS.entries[counterVideoLookback].link in fileContent:
-            print(f"Newest video from {readRSS.feed.title} already watched or downloaded and available on the disk.")
-            # notifications 
-            if platform == "darwin": # macOS
-                pync.notify(
-                    f"No new videos from: {readRSS.feed.title}.",
-                    title='rss-youtube-downloader',
-                    contentImage=iconCheckmark,
-                    sound=""
-                    # open= # TODO: URL
-                    )
-            elif platform == "win32": # Windows
-                toaster.show_toast(
-                    title="rss-youtube-downloader", 
-                    msg=
-                    f"No new videos from: {readRSS.feed.title}.",
-                    icon_path="icons/checkmark.ico",
-                    duration=None,
-                    threaded=True
-                    # callback_on_click= # TODO: check if works without it; function with URL
-                    ) # duration=None - leave notification in Notification Center; threaded=True - rest of the script will be allowed to be executed while the notification is still active
+# try:
+while counterFeedList < len(RSSfeeds): # if counter smaller than number of feeds in the list; iterate through the feed list
+    counterVideoLookback = 0 # NOTE: how far back we should look for the videos (3 = 4 videos back, 10 = 11 videos back, 0 = just newest video)
+    # FIX: not working when eg. 2nd video downloaded and you're looking for the 1st and 3rd
+    readRSS = readingRSS(RSSfeeds[counterFeedList]) #  throw feed to the function and get the data back so we can use it
+    if readRSS.entries[0].link in fileContent: # check if the latest video is watched / downloaded
+        print(f"Newest video from {readRSS.feed.title} already watched or downloaded and available on the disk.")
+        # notifications 
+        if platform == "darwin": # macOS
+            pync.notify(
+                f"No new videos from: {readRSS.feed.title}.",
+                title='rss-youtube-downloader',
+                contentImage=iconCheckmark,
+                sound=""
+                # open= # TODO: URL
+                )
+        elif platform == "win32": # Windows
+            toaster.show_toast(
+                title="rss-youtube-downloader", 
+                msg=
+                f"No new videos from: {readRSS.feed.title}.",
+                icon_path="icons/checkmark.ico",
+                duration=None,
+                threaded=True
+                # callback_on_click= # TODO: check if works without it; function with URL
+                ) # duration=None - leave notification in Notification Center; threaded=True - rest of the script will be allowed to be executed while the notification is still active
+    else:
+        while readRSS.entries[counterVideoLookback].link not in fileContent: # if video is new (not in the file of past downloads) then go and download; if not -> skip 
+        # break if end of the list 
+            if counterVideoLookback >= 2: # NOTE: how far we should look (2 = 3 videos); stop so we don't download too many videos 
+                print(f"That should be enough. Moving on...") # status # TODO
+                break
+
+            print(f"Downloading video # (1 = newest): {counterVideoLookback+1}") # debug / status
+
+            # channel URL
+            # print(f"Channel URL: {readRSS.feed.link}") # print channel URL 
+            
+            # channel name
+            # print(f"Channel name: {readRSS.feed.title}") # print channel name 
+
+            # video title
+            videoTitle = readRSS.entries[counterVideoLookback].title # get latest video's title
+            print(f"Video's title: {videoTitle}") # print the latest video's URL
+
+            # video URL
+            videoURL = readRSS.entries[counterVideoLookback].link # get the latest video's URL
+            print(f"Video's URL: {videoURL}") # print the latest video's URL
+
+            # download video
+            downloadVideo(videoURL) # send URL to function
+
+            counterVideoLookback = counterVideoLookback + 1 # go up the list to the [0] newest video
         else:
-            while readRSS.entries[counterVideoLookback].link not in fileContent: # if video is new (not in the file of past downloads) then go and download; if not -> skip 
+            counterVideoLookback = counterVideoLookback + 1
+            # break
+    counterFeedList = counterFeedList + 1 # iterate through the feed list   
+    # counterVideoLookback = 2 # reset variable to original value from before the loops # TODO: shady
+    # counterVideoLookback = counterVideoLookback - 1 # go up the list to the [0] newest video # TODO: shady
 
-            # break if end of the list 
-                if counterVideoLookback < 0: 
-                    break
-
-                print(f"Video # (1 = newest): {counterVideoLookback+1}") # debug / status
-
-                # channel URL
-                # print(f"Channel URL: {readRSS.feed.link}") # print channel URL 
-                
-                # channel name
-                # print(f"Channel name: {readRSS.feed.title}") # print channel name 
-
-                # video title
-                videoTitle = readRSS.entries[counterVideoLookback].title # get latest video's title
-                print(f"Video's title: {videoTitle}") # print the latest video's URL
-
-                # video URL
-                videoURL = readRSS.entries[counterVideoLookback].link # get the latest video's URL
-                print(f"Video's URL: {videoURL}") # print the latest video's URL
-
-                # download video
-                downloadVideo(videoURL) # send URL to function
-
-                counterVideoLookback = counterVideoLookback - 1 # go up the list to the [0] newest video
-        counterFeedList = counterFeedList + 1
-        counterVideoLookback = 1 # reset variable to original value from before the loops # TODO: shady
-
-except: # file doesn't exist and can't read it, no internet connection, wrong feed URL
-    print("Issues with the checker. Closing...") # TODO: write something more descriptive
+# except: # file doesn't exist and can't read it, no internet connection, wrong feed URL
+#     print("Issues with the checker. Closing...") # TODO: write something more descriptive
 
 # ----------- fun ends here ---------- #
 
@@ -214,6 +217,6 @@ except: # file doesn't exist and can't read it, no internet connection, wrong fe
 
 endTime = time.time() # run time end 
 totalRunTime = round(endTime-startTime,2)
-print(f"Total script run time: {totalRunTime} seconds.")
+print(f"Total script run time: {totalRunTime} seconds. That's {round(totalRunTime/60,2)} minutes.")
 
 #endregion
