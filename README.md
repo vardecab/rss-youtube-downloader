@@ -1,5 +1,7 @@
 # rss-youtube-downloader
 
+![Actively Maintained](https://img.shields.io/badge/Maintenance%20Level-Actively%20Maintained-green.svg)
+<br>
 ![](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue)
 
 >Experimenting a bit with RSS + auto-downloading videos from YouTube.
