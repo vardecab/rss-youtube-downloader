@@ -10,7 +10,7 @@ import feedparser  # read RSS
 
 # other ↓
 import time  # calculate script's run time
-import os # create download path
+import os  # create download path
 
 # notifications ↓
 from sys import platform  # check platform (Windows/macOS)
@@ -39,21 +39,25 @@ print("Starting the script...")  # status
 
 # ---------- download video ---------- #
 
+
 def downloadVideo(videoURL, channelName):
 
     if platform == 'darwin':
-        downloadPath = r'/Users/q/TV Shows/Downloaded from YouTube/' # download location on macOS
+        # download location on macOS
+        downloadPath = r'/Users/q/TV Shows/Downloaded from YouTube/'
     elif platform == 'win32':
-        downloadPath = r'C:\Users\x\Videos\TV Shows\Downloaded from YouTube' # download location on Windows
-    
+        # download location on Windows
+        downloadPath = r'C:\Users\x\Videos\TV Shows\Downloaded from YouTube'
+
     # TODO: create folder if it doesn't exist
-    # create a folder if it doesn't exist 
+    # create a folder if it doesn't exist
     if not os.path.isdir("Downloaded from YouTube"):
         os.mkdir("Downloaded from YouTube")
         print(f"Folder created: Downloaded from YouTube")
-        
+
     # downloadPath = r'/Users/x/TV Shows/Downloaded from YouTube/' + readRSS.feed.title # NOTE: didn't work so using something different below:
-    downloadPath = os.path.join(downloadPath, channelName) # create path from download location ^ + channel name (use if exists, create if it doesn't)
+    # create path from download location ^ + channel name (use if exists, create if it doesn't)
+    downloadPath = os.path.join(downloadPath, channelName)
 
     #  parameters for the downloader
     optionalParameters = {
@@ -114,6 +118,7 @@ def downloadVideo(videoURL, channelName):
 
 # ------------- read RSS ------------- #
 
+
 def readingRSS(RSSfeed):
     try:
         readRSS = feedparser.parse(RSSfeed)  # read the RSS feed
@@ -126,6 +131,7 @@ def readingRSS(RSSfeed):
         exit()  # end the script
 
 # -------- add feeds to a list ------- #
+
 
 # create a list of feeds
 RSSfeeds = [
@@ -159,7 +165,7 @@ except:  # if it doesn't exist, create it
 counterFeedList = 0  # go through feeds in the list
 
 # try:
-    # if counter smaller than number of feeds in the list; iterate through the feed list
+# if counter smaller than number of feeds in the list; iterate through the feed list
 while counterFeedList < len(RSSfeeds):
     # NOTE: how far back we should look for the videos (3 = 4 videos back, 10 = 11 videos back, 0 = just newest video)
     counterVideoLookback = 0
