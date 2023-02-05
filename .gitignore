@@ -1,8 +1,12 @@
 # other 
 .vscode
 .ds_store
+TODO
 
 # automate
 automate.sh
 automate
 automate/*
+
+# list with URLs
+videos.txt
