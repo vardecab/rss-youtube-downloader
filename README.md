@@ -18,13 +18,13 @@
 
 <!-- ## How to use
 
-1. Take your favourite YouTube channel URL: https://www.youtube.com/channel/UC8JbbaZ_jgdsoUqrZ2bXtQQ
+1. Take your favorite YouTube channel URL: https://www.youtube.com/channel/UC8JbbaZ_jgdsoUqrZ2bXtQQ
 2. Get channel ID either from the URL or by going here: https://commentpicker.com/youtube-channel-id.php
 3. Use channel ID in the code. -->
 
 ## Release History
 
-- 0.8: New library used for displaying Windows notifications; create download folder if it doesn't exist; dowloading files in `.mp4` instead of default `.webm` for improved compatibility; using external downloader to improve download speeds; added SponsorBlock to remove promo segments from videos.
+- 0.8: New library used for displaying Windows notifications; create download folder if it doesn't exist; downloading files in `.mp4` instead of default `.webm` for improved compatibility; using external downloader to improve download speeds; added SponsorBlock to remove promo segments from videos.
 - 0.7: Added code to create a download folder if it doesn't exist; added different download path for Windows.
 - 0.6.1: Removed unnecessary code; added comments.
 - 0.6: Rewrote some core logic to better handle new files.

@@ -16,8 +16,9 @@ import os  # create download path
 from sys import platform  # check platform (Windows/macOS)
 if platform == 'darwin':
     import pync  # macOS notifications
-    iconDownload = "icons/download.png"  # location of icon
-    iconCheckmark = "icons/checkmark.png"  # location of icon
+    # icons
+    iconDownload = "icons/download.png" 
+    iconCheckmark = "icons/checkmark.png"  
 elif platform == 'win32':
     from plyer import notification  # Windows notification
 
