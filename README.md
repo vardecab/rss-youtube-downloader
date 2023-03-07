@@ -24,6 +24,7 @@
 
 ## Release History
 
+- 0.8: New library used for displaying Windows notifications; create download folder if it doesn't exist; dowloading files in `.mp4` instead of default `.webm` for improved compatibility; using external downloader to improve download speeds; added SponsorBlock to remove promo segments from videos.
 - 0.7: Added code to create a download folder if it doesn't exist; added different download path for Windows.
 - 0.6.1: Removed unnecessary code; added comments.
 - 0.6: Rewrote some core logic to better handle new files.
@@ -60,6 +61,8 @@ Using [SemVer](http://semver.org/).
 - [yt-dlp](https://pypi.org/project/yt-dlp/) to download videos
 - Icons from [Flaticon](https://www.flaticon.com)
 - PNG → ICO conversion with [ConvertICO](https://convertico.com)
+- Windows notifications done with: [plyer](https://pypi.org/project/plyer/)
+- macOS notifications done with: [pync](https://github.com/SeTeM/pync)
 
 ## Contributing
 
