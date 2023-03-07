@@ -59,6 +59,7 @@ Using [SemVer](http://semver.org/).
 
 - [feedparser](https://pypi.org/project/feedparser/) to read RSS feeds
 - [yt-dlp](https://pypi.org/project/yt-dlp/) to download videos
+- [ChatGPT](https://chat.openai.com/chat)
 - Icons from [Flaticon](https://www.flaticon.com)
 - PNG → ICO conversion with [ConvertICO](https://convertico.com)
 - Windows notifications done with: [plyer](https://pypi.org/project/plyer/)
