@@ -43,14 +43,14 @@ def downloadVideo(videoURL, channelName):
 
     # ------ create download folder ------ #
 
-    downloadFolderName = 'Downloaded from YouTube'
+    downloadFolderName = 'YouTube Downloads'
 
     if platform == 'darwin':
         # download location on macOS
-        downloadParentFolder = r'/Users/q/TV Shows/'
+        downloadParentFolder = r'/Users/q/Videos/'
     elif platform == 'win32':
         # download location on Windows
-        downloadParentFolder = r'C:/Users/x/Videos/TV Shows/'
+        downloadParentFolder = r'C:/Users/x/Videos/'
 
     # check if the folder exists in the parent folder
     downloadPath = os.path.join(downloadParentFolder, downloadFolderName)
