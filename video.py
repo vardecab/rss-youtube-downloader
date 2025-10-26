@@ -45,9 +45,12 @@ def downloadVideo(videoURL, channelName):
 
     downloadFolderName = 'YouTube Downloads'
 
-    if platform == 'darwin':
-        # download location on macOS
-        downloadParentFolder = r'/Users/q/Videos/'
+    elif platform == "darwin": # macOS 
+            downloadPath = r'/Volumes/Kingston 1TB/Jellyfin' # download location
+            # Check if the download path is accessible
+            if not os.path.exists(downloadPath):
+                print(colored("Download path not accessible. Saving to Desktop instead.", 'yellow'))
+                downloadPath = r'/Users/q/Movies/YouTube Downloads'  # fallback to desktop'
     elif platform == 'win32':
         # download location on Windows
         downloadParentFolder = r'C:/Users/x/Videos/'
@@ -153,10 +156,18 @@ def readingRSS(RSSfeed):
 
 # create a list of feeds
 RSSfeeds = [
-    'https://www.youtube.com/feeds/videos.xml?channel_id=UC8LJZNHnqXKg5TMgyvxszPA'  # Budda
+    'https://www.youtube.com/feeds/videos.xml?channel_id=UC8LJZNHnqXKg5TMgyvxszPA',  # Budda
     # 'https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ',  # MKBHD
     # 'https://www.youtube.com/feeds/videos.xml?channel_id=UC8JbbaZ_jgdsoUqrZ2bXtQQ', # Lekko Stronniczy
     # 'https://www.youtube.com/feeds/videos.xml?channel_id=UC6n8I1UDTKP1IWjQMg6_TwA'  # B1M
+    'https://www.youtube.com/feeds/videos.xml?playlist_id=PLESJyWkLUYUhhZleYHyWf177bduR2Thln'  # Basket Office
+    # 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVkM5S4-_IzLDpInhd04W5GJ', # NBA Top Plays of the Week
+    # 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVl8kzNkZoPhKIkMXmNvtGZV', # NBA Uncut
+    # 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVlJUCo0M8Nzj-dsGBexP6Bk', # NBA Fantastic Finishes
+    # 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVlZh5EYXYBl1ao6QnvVEice' # NBA Top Plays Of The Night
+    # 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLlVlyGVtvuVkpQeaF_AvbkZN9F9dXW0aC', # NBA Top Performances
+    # 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLU6BYY1Lu_feVbuZEscpd6xT32zCrVrev' # NBA Shaqtin' A Fool
+    
 ]
 
 # if no feeds then terminate the script
@@ -196,13 +207,14 @@ while counterFeedList < len(RSSfeeds):
             f"Newest video from {readRSS.feed.title} already watched or downloaded and available on the disk.")
         # notifications
         if platform == "darwin":  # macOS
-            pync.notify(
-                f"No new videos from: {readRSS.feed.title}.",
-                title='rss-youtube-downloader',
-                contentImage=iconCheckmark,
-                sound=""
+            # pync.notify(
+            #     f"No new videos from: {readRSS.feed.title}.",
+            #     title='rss-youtube-downloader',
+            #     contentImage=iconCheckmark,
+            #     sound=""
+            print
                 # open=
-            )
+            # )
         elif platform == "win32":  # Windows
             notification.notify(
                 title='rss-youtube-downloader',
@@ -214,9 +226,10 @@ while counterFeedList < len(RSSfeeds):
 
             # break if we have enough videos
             # how far we should look (2 = 3 videos); stop so we don't download too many videos
-            if counterVideoLookback >= 2:
+            if counterVideoLookback >= 5:
                 print(f"That should be enough. Moving on...")  # status
                 break
+            # FIX: doesn't work if you want to download more but newest is already downloaded 
 
             # status
             print(
@@ -254,6 +267,61 @@ while counterFeedList < len(RSSfeeds):
     # print("Issues with the checker. Closing...")
 
 # ----------- fun ends here ---------- #
+
+# ------- move NBA files around ------ #
+
+# import shutil  # for moving files
+# import os  # for directory operations
+
+# # List of source folders
+# source_folders = [
+#     '/Users/q/Movies/YouTube Downloads/Top Performances | 2024-25',
+#     '/Users/q/Movies/YouTube Downloads/NBA Top Plays Of The Night | 2024-25',
+#     '/Users/q/Movies/YouTube Downloads/Fantastic Finishes | 2024-25',
+#     '/Users/q/Movies/YouTube Downloads/Uncut | 2024-25',
+#     '/Users/q/Movies/YouTube Downloads/Top Plays of the Week | 2024-25',
+#     r"/Users/q/Movies/YouTube Downloads/Shaqtin' A Fool"  # Use raw string to avoid escape issues
+# ]
+
+# # Destination folder
+# destination_folder = '/Users/q/Movies/YouTube Downloads/NBA'
+
+# # Move files from all source folders to the destination folder
+# for source_folder in source_folders:
+#     if os.path.exists(source_folder):  # Check if the source folder exists
+#         for filename in os.listdir(source_folder):
+#             file_path = os.path.join(source_folder, filename)
+#             if os.path.isfile(file_path):  # Check if it's a file
+#                 destination_path = os.path.join(destination_folder, filename)
+                
+#                 # Check if the destination file already exists
+#                 if os.path.exists(destination_path):
+#                     # Create a new filename by appending a number to avoid conflict
+#                     base, extension = os.path.splitext(filename)
+#                     counter = 1
+#                     new_filename = f"{base} ({counter}){extension}"
+#                     new_destination_path = os.path.join(destination_folder, new_filename)
+                    
+#                     # Increment the counter until a unique filename is found
+#                     while os.path.exists(new_destination_path):
+#                         counter += 1
+#                         new_filename = f"{base} ({counter}){extension}"
+#                         new_destination_path = os.path.join(destination_folder, new_filename)
+                    
+#                     # Move the file to the new destination path
+#                     shutil.move(file_path, new_destination_path)  # move file
+#                 else:
+#                     # Move the file if it doesn't exist in the destination
+#                     shutil.move(file_path, destination_path)  # move file
+#     else:
+#         print(f"Source folder '{source_folder}' does not exist. Skipping...")  # Notify if folder doesn't exist
+
+# # Remove source folders regardless of file presence in destination
+# for source_folder in source_folders:
+#     if os.path.exists(source_folder):  # Check if the source folder exists before removing
+#         shutil.rmtree(source_folder)  # remove the folder and its contents
+
+# print(f"All files moved to '{destination_folder}' and source folders removed.")
 
 # ------------- run time ------------- #
 

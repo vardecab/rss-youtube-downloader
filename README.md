@@ -24,6 +24,7 @@
 
 ## Release History
 
+- 0.9: Cleanup 
 - 0.8.1: Fixed download paths.
 - 0.8: New library used for displaying Windows notifications; create download folder if it doesn't exist; downloading files in `.mp4` instead of default `.webm` for improved compatibility; using external downloader to improve download speeds; added SponsorBlock to remove promo segments from videos.
 - 0.7: Added code to create a download folder if it doesn't exist; added different download path for Windows.
