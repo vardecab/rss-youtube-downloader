@@ -1,4 +1,4 @@
-# rss-youtube-downloader
+# youtube-downloader-rss
 
 ![Actively Maintained](https://img.shields.io/badge/Maintenance%20Level-Actively%20Maintained-green.svg)
 <br>
